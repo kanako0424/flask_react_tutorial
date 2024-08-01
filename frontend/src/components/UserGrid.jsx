@@ -1,8 +1,8 @@
 import { Flex, Grid, Spinner, Text } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
-import UserCard from "./UserCard";
+import UserCard from "./UserCard.jsx";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../App";
+import { BASE_URL } from "../App.jsx";
 
 const UserGrid = ({ users, setUsers }) => {
 	const [isLoading, setIsLoading] = useState(true);

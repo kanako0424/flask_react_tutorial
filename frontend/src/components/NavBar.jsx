@@ -1,7 +1,7 @@
 import { Box, Button, Container, Flex, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
-import CreateUserModal from "./CreateUserModal";
+import CreateUserModal from "./CreateUserModal.jsx";
 import PropTypes from 'prop-types';
 
 

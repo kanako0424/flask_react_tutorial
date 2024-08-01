@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BASE_URL } from "../App";
+import { BASE_URL } from "../App.jsx";
 import PropTypes from 'prop-types';
 
 

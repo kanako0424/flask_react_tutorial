@@ -1,6 +1,6 @@
 import { Container, Stack, Text } from "@chakra-ui/react";
-import Navbar from "./components/Navbar";
-import UserGrid from "./components/UserGrid";
+import Navbar from './components/Navbar.jsx';
+import UserGrid from "./components/UserGrid.jsx";
 import { useState } from "react";
 
 // updated this after recording. Make sure you do the same so that it can work in production

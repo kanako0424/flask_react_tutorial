@@ -1,7 +1,7 @@
 import { Avatar, Box, Card, CardBody, CardHeader, Flex, Heading, IconButton, Text, useToast } from "@chakra-ui/react";
 import { BiTrash } from "react-icons/bi";
-import EditModal from "./EditModal";
-import { BASE_URL } from "../App";
+import EditModal from "./EditModal.jsx";
+import { BASE_URL } from "../App.jsx";
 import PropTypes from 'prop-types';
 
 
