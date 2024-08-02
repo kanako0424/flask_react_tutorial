@@ -42,12 +42,6 @@ function App() {
 		
 		initializeLiff();
 	}, [])
-
-	useEffect(() => {
-		if (currentUser) {
-		  console.log("App.jsx, CurrentUser:", currentUser);
-		}
-	  }, [currentUser]);
 	
 
 	return (
