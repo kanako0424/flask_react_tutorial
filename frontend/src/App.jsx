@@ -22,7 +22,7 @@ function App() {
 				await liff.init({
 					liffId: '2005976312-NqAkEXnX', // Use your own liffId
 					withLoginOnExternalBrowser: true,
-					mock: false,
+					mock: true,
 				});			  
 				if (!liff.isInClient()) {
 					liff.login();

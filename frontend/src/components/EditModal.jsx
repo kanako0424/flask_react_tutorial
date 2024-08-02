@@ -61,7 +61,7 @@ function EditModal({ setUsers, user }) {
 		} catch (error) {
 			toast({
 				status: "error",
-				title: "An error occurred.",
+				title: "An error occurred in editing a user",
 				description: error.message,
 				duration: 4000,
 				position: "top-center",

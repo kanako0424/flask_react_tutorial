@@ -29,7 +29,7 @@ const UserCard = ({ user, setUsers }) => {
 			});
 		} catch (error) {
 			toast({
-				title: "An error occurred",
+				title: "An error occurred in deleting a user",
 				description: error.message,
 				status: "error",
 				duration: 4000,
@@ -78,10 +78,11 @@ UserCard.propTypes = {
 	setUsers: PropTypes.func.isRequired,
 	user: PropTypes.shape({
 		id: PropTypes.string.isRequired,
-		imgUrl: PropTypes.string.isRequired,
+		imgUrl: PropTypes.string,
 		name: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,
-		description: PropTypes.string,
+		description: PropTypes.string.isRequired,
+		creatorId: PropTypes.string,
 	}).isRequired,
 };
 

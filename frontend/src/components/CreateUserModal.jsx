@@ -76,7 +76,7 @@ const CreateUserModal = ({ setUsers }) => {
 		} catch (error) {
 			toast({
 				status: "error",
-				title: "An error occurred.",
+				title: "An error occurred in creating a user",
 				description: error.message,
 				duration: 4000,
 			});
