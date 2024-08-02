@@ -21,8 +21,8 @@ function App() {
 				liff.use(new LiffMockPlugin());
 				await liff.init({
 					liffId: '2005976312-NqAkEXnX', // Use your own liffId
-					withLoginOnExternalBrowser: true,
-					mock: true,
+					// withLoginOnExternalBrowser: true,
+					// mock: true,
 				});			  
 				if (!liff.isInClient()) {
 					liff.login();
