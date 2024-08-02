@@ -7,6 +7,7 @@ class Friend(db.Model):
     description = db.Column(db.Text, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     img_url = db.Column(db.String(200), nullable=True)
+    creatorId = db.Column(db.String(50), nullable=True, default="1")
     
         
     def to_json(self):
@@ -16,5 +17,6 @@ class Friend(db.Model):
             "role": self.role,
             "description": self.description,
             "gender": self.gender,
-            "imgUrl": self.img_url
+            "imgUrl": self.img_url,
+            "creatorId": self.creatorId
         }

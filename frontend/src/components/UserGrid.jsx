@@ -10,13 +10,19 @@ const UserGrid = ({ users, setUsers }) => {
 	useEffect(() => {
 		const getUsers = async () => {
 			try {
-				const res = await fetch(BASE_URL + "/friends");
-				const data = await res.json();
+				const res = await fetch(BASE_URL+'/friends', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+					},
+				});
+				const resData = await res.json();
 
 				if (!res.ok) {
-					throw new Error(data.error);
+					throw new Error(resData.error);
 				}
-				setUsers(data);
+				setUsers(resData);
 			} catch (error) {
 				console.error(error);
 			} finally {

@@ -16,9 +16,9 @@ import {
 	useDisclosure,
 	useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { BiEditAlt } from "react-icons/bi";
-import { BASE_URL } from "../App.jsx";
+import { BASE_URL, CurrentUserContext } from "../App.jsx";
 import PropTypes from 'prop-types';
 
 
@@ -31,6 +31,8 @@ function EditModal({ setUsers, user }) {
 		description: user.description,
 	});
 	const toast = useToast();
+	const currentUser = useContext(CurrentUserContext);
+
 
 	const handleEditUser = async (e) => {
 		e.preventDefault();
@@ -43,11 +45,11 @@ function EditModal({ setUsers, user }) {
 				},
 				body: JSON.stringify(inputs),
 			});
-			const data = await res.json();
+			const resData = await res.json();
 			if (!res.ok) {
-				throw new Error(data.error);
+				throw new Error(resData.error);
 			}
-			setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? data : u)));
+			setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? resData : u)));
 			toast({
 				status: "success",
 				title: "Yayy! 🎉",
@@ -70,15 +72,20 @@ function EditModal({ setUsers, user }) {
 	};
 
 	return (
-		<>
-			<IconButton
-				onClick={onOpen}
-				variant='ghost'
-				colorScheme='blue'
-				aria-label='See menu'
-				size={"sm"}
-				icon={<BiEditAlt size={20} />}
-			/>
+		<>    
+		<CurrentUserContext.Provider value={currentUser}>
+			{currentUser && currentUser.userId === user.creatorId && (
+				<IconButton
+					onClick={onOpen}
+					variant='ghost'
+					colorScheme='blue'
+					aria-label='See menu'
+					size={"sm"}
+					icon={<BiEditAlt size={20} />}
+				/>
+			)}
+		</CurrentUserContext.Provider>
+
 
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
@@ -138,6 +145,7 @@ EditModal.propTypes = {
 		name: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,
 		description: PropTypes.string,
+		creatorId: PropTypes.string
 	}).isRequired,
   };
 

@@ -1,20 +1,23 @@
 import { Avatar, Box, Card, CardBody, CardHeader, Flex, Heading, IconButton, Text, useToast } from "@chakra-ui/react";
 import { BiTrash } from "react-icons/bi";
 import EditModal from "./EditModal.jsx";
-import { BASE_URL } from "../App.jsx";
+import { BASE_URL, CurrentUserContext } from "../App.jsx";
 import PropTypes from 'prop-types';
+import { useContext } from "react";
 
 
 const UserCard = ({ user, setUsers }) => {
+	const currentUser = useContext(CurrentUserContext);
+
 	const toast = useToast();
 	const handleDeleteUser = async () => {
 		try {
 			const res = await fetch(BASE_URL + "/friends/" + user.id, {
 				method: "DELETE",
 			});
-			const data = await res.json();
+			const reData = await res.json();
 			if (!res.ok) {
-				throw new Error(data.error);
+				throw new Error(reData.error);
 			}
 			setUsers((prevUsers) => prevUsers.filter((u) => u.id !== user.id));
 			toast({
@@ -48,17 +51,19 @@ const UserCard = ({ user, setUsers }) => {
 						</Box>
 					</Flex>
 
-					<Flex>
-						<EditModal user={user} setUsers={setUsers} />
-						<IconButton
-							variant='ghost'
-							colorScheme='red'
-							size={"sm"}
-							aria-label='See menu'
-							icon={<BiTrash size={20} />}
-							onClick={handleDeleteUser}
-						/>
-					</Flex>
+					{currentUser && currentUser.userId === user.creatorId && (
+						<Flex>
+							<EditModal user={user} setUsers={setUsers} />
+							<IconButton
+								variant='ghost'
+								colorScheme='red'
+								size={"sm"}
+								aria-label='See menu'
+								icon={<BiTrash size={20} />}
+								onClick={handleDeleteUser}
+							/>
+						</Flex>
+					)}
 				</Flex>
 			</CardHeader>
 

@@ -17,9 +17,9 @@ import {
 	useDisclosure,
 	useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState ,useContext } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BASE_URL } from "../App.jsx";
+import { BASE_URL, CurrentUserContext } from "../App.jsx";
 import PropTypes from 'prop-types';
 
 
@@ -33,6 +33,8 @@ const CreateUserModal = ({ setUsers }) => {
 		gender: "",
 	});
 	const toast = useToast();
+    const currentUser = useContext(CurrentUserContext);
+
 
 	const handleCreateUser = async (e) => {
 		e.preventDefault(); // prevent page refresh
@@ -43,12 +45,16 @@ const CreateUserModal = ({ setUsers }) => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(inputs),
+				body: JSON.stringify({
+                    ...inputs,
+                    creatorId: currentUser.userId,
+                }),
 			});
 
-			const data = await res.json();
+			const resData = await res.json();
+
 			if (!res.ok) {
-				throw new Error(data.error);
+				throw new Error(resData.error);
 			}
 
 			toast({
@@ -59,7 +65,7 @@ const CreateUserModal = ({ setUsers }) => {
 				position: "top-center",
 			});
 			onClose();
-			setUsers((prevUsers) => [...prevUsers, data]);
+			setUsers((prevUsers) => [...prevUsers, resData]);
 
 			setInputs({
 				name: "",

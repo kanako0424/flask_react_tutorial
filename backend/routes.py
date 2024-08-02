@@ -25,6 +25,8 @@ def create_friend():
     role = data.get("role")
     description = data.get("description")
     gender = data.get("gender")
+    creatorId = data.get("creatorId")
+    print("routes.py l.29 creatorid: ",creatorId)
 
     # Fetch avatar image based on gender
     if gender == "male":
@@ -34,7 +36,7 @@ def create_friend():
     else:
       img_url = None
 
-    new_friend = Friend(name=name, role=role, description=description, gender= gender, img_url=img_url)
+    new_friend = Friend(name=name, role=role, description=description, gender=gender, img_url=img_url, creatorId=creatorId)
 
     db.session.add(new_friend) 
     db.session.commit()
