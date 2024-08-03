@@ -52,8 +52,8 @@ function EditModal({ setUsers, user }) {
 			setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? resData : u)));
 			toast({
 				status: "success",
-				title: "Yayy! 🎉",
-				description: "Friend updated successfully.",
+				title: "イェイ! 🎉",
+				description: "友達情報を更新できました！",
 				duration: 2000,
 				position: "top-center",
 			});
@@ -61,7 +61,7 @@ function EditModal({ setUsers, user }) {
 		} catch (error) {
 			toast({
 				status: "error",
-				title: "An error occurred in editing a user",
+				title: "友達情報の更新中にエラーが起きました",
 				description: error.message,
 				duration: 4000,
 				position: "top-center",
@@ -91,34 +91,34 @@ function EditModal({ setUsers, user }) {
 				<ModalOverlay />
 				<form onSubmit={handleEditUser}>
 					<ModalContent>
-						<ModalHeader>My new BFF 😍</ModalHeader>
+						<ModalHeader>私の友達 😍</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody pb={6}>
 							<Flex alignItems={"center"} gap={4}>
 								<FormControl>
-									<FormLabel>Full Name</FormLabel>
+									<FormLabel>フルネーム</FormLabel>
 									<Input
-										placeholder='John Doe'
+										placeholder='田中　太郎'
 										value={inputs.name}
 										onChange={(e) => setInputs((prev) => ({ ...prev, name: e.target.value }))}
 									/>
 								</FormControl>
 
 								<FormControl>
-									<FormLabel>Role</FormLabel>
+									<FormLabel>役割</FormLabel>
 									<Input
-										placeholder='Software Engineer'
+										placeholder='エンジニア'
 										value={inputs.role}
 										onChange={(e) => setInputs((prev) => ({ ...prev, role: e.target.value }))}
 									/>
 								</FormControl>
 							</Flex>
 							<FormControl mt={4}>
-								<FormLabel>Description</FormLabel>
+								<FormLabel>説明</FormLabel>
 								<Textarea
 									resize={"none"}
 									overflowY={"hidden"}
-									placeholder="He's a software engineer who loves to code and build things."
+									placeholder="彼はGoogleのエンジニアで、物作りが好き。"
 									value={inputs.description}
 									onChange={(e) => setInputs((prev) => ({ ...prev, description: e.target.value }))}
 								/>

@@ -23,13 +23,13 @@ const UserCard = ({ user, setUsers }) => {
 			toast({
 				status: "success",
 				title: "Success",
-				description: "Friend deleted successfully.",
+				description: "友達情報が削除されました！",
 				duration: 2000,
 				position: "top-center",
 			});
 		} catch (error) {
 			toast({
-				title: "An error occurred in deleting a user",
+				title: "友達情報の削除中にエラーが起きました",
 				description: error.message,
 				status: "error",
 				duration: 4000,

@@ -62,8 +62,8 @@ const CreateUserModal = ({ setUsers }) => {
 
 			toast({
 				status: "success",
-				title: "Yayy! 🎉",
-				description: "Friend created successfully.",
+				title: "イェイ! 🎉",
+				description: "友達情報を登録できました！",
 				duration: 2000,
 				position: "top-center",
 			});
@@ -79,7 +79,7 @@ const CreateUserModal = ({ setUsers }) => {
 		} catch (error) {
 			toast({
 				status: "error",
-				title: "An error occurred in creating a user",
+				title: "友達情報の登録中にエラーが起きました",
 				description: error.message,
 				duration: 4000,
 			});
@@ -98,16 +98,16 @@ const CreateUserModal = ({ setUsers }) => {
 				<ModalOverlay />
 				<form onSubmit={handleCreateUser}>
 					<ModalContent>
-						<ModalHeader> My new BFF 😍 </ModalHeader>
+						<ModalHeader> 私の友達 😍 </ModalHeader>
 						<ModalCloseButton />
 
 						<ModalBody pb={6}>
 							<Flex alignItems={"center"} gap={4}>
 								{/* Left */}
 								<FormControl>
-									<FormLabel>Full Name</FormLabel>
+									<FormLabel>フルネーム</FormLabel>
 									<Input
-										placeholder='John Doe'
+										placeholder='田中　太郎'
 										value={inputs.name}
 										onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
 									/>
@@ -115,9 +115,9 @@ const CreateUserModal = ({ setUsers }) => {
 
 								{/* Right */}
 								<FormControl>
-									<FormLabel>Role</FormLabel>
+									<FormLabel>肩書き</FormLabel>
 									<Input
-										placeholder='Software Engineer'
+										placeholder='エンジニア'
 										value={inputs.role}
 										onChange={(e) => setInputs({ ...inputs, role: e.target.value })}
 									/>
@@ -125,11 +125,11 @@ const CreateUserModal = ({ setUsers }) => {
 							</Flex>
 
 							<FormControl mt={4}>
-								<FormLabel>Description</FormLabel>
+								<FormLabel>説明</FormLabel>
 								<Textarea
 									resize={"none"}
 									overflowY={"hidden"}
-									placeholder="He's a software engineer who loves to code and build things."
+									placeholder="彼はGoogleのエンジニアで、物作りが好き。"
 									value={inputs.description}
 									onChange={(e) => setInputs({ ...inputs, description: e.target.value })}
 								/>
@@ -141,13 +141,13 @@ const CreateUserModal = ({ setUsers }) => {
 										value='male'
 										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
 									>
-										Male
+										男性
 									</Radio>
 									<Radio
 										value='female'
 										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
 									>
-										Female
+										女性
 									</Radio>
 								</Flex>
 							</RadioGroup>
@@ -155,9 +155,9 @@ const CreateUserModal = ({ setUsers }) => {
 
 						<ModalFooter>
 							<Button colorScheme='blue' mr={3} type='submit' isLoading={isLoading}>
-								Add
+								追加
 							</Button>
-							<Button onClick={onClose}>Cancel</Button>
+							<Button onClick={onClose}>キャンセル</Button>
 						</ModalFooter>
 					</ModalContent>
 				</form>
