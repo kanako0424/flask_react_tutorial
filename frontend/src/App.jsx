@@ -3,7 +3,7 @@ import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext, useCallback } from "react";
 import liff from '@line/liff';
-import LIFFInspectorPlugin from '@line/liff-inspector';
+// import LIFFInspectorPlugin from '@line/liff-inspector';
 
 export const CurrentUserContext = createContext();
 
@@ -16,7 +16,7 @@ function App() {
 
 	const initializeLiff = useCallback(async () => {
 		try {
-			liff.use(new LIFFInspectorPlugin());
+			// liff.use(new LIFFInspectorPlugin());
 			await liff.init({
 				liffId: '2005976312-NqAkEXnX', // Use your own liffId
 				withLoginOnExternalBrowser: true,
