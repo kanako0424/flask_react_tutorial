@@ -33,10 +33,10 @@ const CreateUserModal = ({ setUsers }) => {
 		gender: "",
 	});
 	const toast = useToast();
-    const currentUser = useContext(CurrentUserContext);
+	const currentUser = useContext(CurrentUserContext);
 
 
-	
+
 
 
 	const handleCreateUser = async (e) => {
@@ -49,9 +49,9 @@ const CreateUserModal = ({ setUsers }) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-                    ...inputs,
-                    creatorId: currentUser.userId,
-                }),
+					...inputs,
+					creatorId: currentUser.userId,
+				}),
 			});
 
 			const resData = await res.json();
@@ -167,13 +167,13 @@ const CreateUserModal = ({ setUsers }) => {
 };
 
 CreateUserModal.propTypes = {
-	setUsers: PropTypes.func.isRequired,
+	setUsers: PropTypes.func,
 	user: PropTypes.shape({
 		id: PropTypes.string.isRequired,
 		name: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,
 		description: PropTypes.string,
-	}).isRequired,
+	}),
   };
 
 export default CreateUserModal;

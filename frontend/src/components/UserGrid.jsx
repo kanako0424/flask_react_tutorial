@@ -70,14 +70,13 @@ const UserGrid = ({ users, setUsers }) => {
 UserGrid.propTypes = {
 	users: PropTypes.arrayOf(
 	PropTypes.shape({
-		id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+		id: PropTypes.string,
 		name: PropTypes.string,
 		role: PropTypes.string,
 		description: PropTypes.string,
-	})
-	).isRequired,
-	setUsers: PropTypes.func.isRequired,
-	isLoading: PropTypes.bool.isRequired,
+	})),
+	setUsers: PropTypes.func,
+	isLoading: PropTypes.bool,
   };
 
 

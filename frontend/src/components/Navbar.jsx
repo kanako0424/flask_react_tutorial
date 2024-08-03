@@ -44,7 +44,7 @@ const Navbar = ({ setUsers }) => {
 
 
 Navbar.propTypes = {
-	setUsers: PropTypes.func.isRequired,
+	setUsers: PropTypes.func,
 };
 
 export default Navbar;
