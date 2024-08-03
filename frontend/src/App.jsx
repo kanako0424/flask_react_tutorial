@@ -3,7 +3,10 @@ import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext } from "react";
 import liff from '@line/liff';
-import { LiffMockPlugin } from '@line/liff-mock';
+// import { LiffMockPlugin } from '@line/liff-mock';
+import LIFFInspectorPlugin from '@line/liff-inspector';
+
+
 
 
 export const CurrentUserContext = createContext();
@@ -18,13 +21,14 @@ function App() {
 	useEffect(() => {
 		const initializeLiff = async () => {
 			try {
-				liff.use(new LiffMockPlugin());
+				// liff.use(new LiffMockPlugin());
+				liff.use(new LIFFInspectorPlugin());
 				await liff.init({
 					liffId: '2005976312-NqAkEXnX', // Use your own liffId
-					// withLoginOnExternalBrowser: true,
+					withLoginOnExternalBrowser: true,
 					// mock: true,
 				});			  
-				if (!liff.isInClient()) {
+				if (!liff.isLoggedIn()) {
 					liff.login();
 					const profile = await liff.getProfile();
 					setCurrentUser({
@@ -32,6 +36,8 @@ function App() {
 						displayName: profile.displayName,
 						pictureUrl: profile.pictureUrl,
 					});
+					console.log(currentUser)
+					
 				} else {
 					console.log('User is logged in');
 				}
