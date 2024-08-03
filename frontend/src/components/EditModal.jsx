@@ -127,9 +127,9 @@ function EditModal({ setUsers, user }) {
 
 						<ModalFooter>
 							<Button colorScheme='blue' mr={3} type='submit' isLoading={isLoading}>
-								Update
+								更新
 							</Button>
-							<Button onClick={onClose}>Cancel</Button>
+							<Button onClick={onClose}>キャンセル</Button>
 						</ModalFooter>
 					</ModalContent>
 				</form>
