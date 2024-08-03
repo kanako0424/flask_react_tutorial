@@ -1,12 +1,15 @@
-import { Box, Button, Container, Flex, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Text, useColorMode, useColorModeValue, Image, Tooltip } from "@chakra-ui/react";
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 import CreateUserModal from "./CreateUserModal.jsx";
 import PropTypes from 'prop-types';
-
+import { CurrentUserContext } from "../App.jsx";
+import { useContext } from "react";
 
 const Navbar = ({ setUsers }) => {
 	const { colorMode, toggleColorMode } = useColorMode();
+	const currentUser = useContext(CurrentUserContext);
+
 	return (
 		<Container maxW={"900px"}>
 			<Box px={4} my={4} borderRadius={5} bg={useColorModeValue("gray.200", "gray.700")}>
@@ -27,9 +30,16 @@ const Navbar = ({ setUsers }) => {
 					</Flex>
 					{/* Right side */}
 					<Flex gap={3} alignItems={"center"}>
-						<Text fontSize={"lg"} fontWeight={500} display={{ base: "none", md: "block" }}>
-							BFFship 🔥
-						</Text>
+					{currentUser && currentUser.pictureUrl && (
+						<Tooltip label={`${currentUser.displayName}としてログイン中`} aria-label='A tooltip'>
+							<Image
+								borderRadius='full'
+								boxSize='40px'
+								src={currentUser.pictureUrl}
+								alt={currentUser.displayName}
+							/>
+						</Tooltip>
+					)}
 
 						<Button onClick={toggleColorMode}>
 							{colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}

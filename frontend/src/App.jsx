@@ -87,7 +87,7 @@ function App() {
 
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
-			<Stack minH={"100vh"}>
+			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
 				<Navbar setUsers={setUsers} />
 
 				<Container maxW={"1200px"} my={4}>
