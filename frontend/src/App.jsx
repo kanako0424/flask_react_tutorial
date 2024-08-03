@@ -20,7 +20,6 @@ function App() {
 
 	const initializeLiff = useCallback(async () => {
 		try {
-			console.log("initializedIff is called")
 			liff.use(new LIFFInspectorPlugin());
 			await liff.init({
 				liffId: '2005976312-NqAkEXnX', // Use your own liffId
@@ -28,7 +27,6 @@ function App() {
 			});
 			if (!liff.isLoggedIn()) {
 				liff.login();
-				console.log("liff.login is called");
 			} else {
 				console.log('User is logged in');
 			}
@@ -38,9 +36,7 @@ function App() {
 	}, []);
 
 	const getUserInfo = useCallback(async () => {
-		console.log("getUserInfo is called:" +currentUser)
 		const idToken = liff.getIDToken();
-		console.log("idToken is: "+ idToken)
 		try {
 			const response = await fetch(`${BASE_URL}/verify`, {
 				method: 'POST',
@@ -73,7 +69,7 @@ function App() {
 		} catch (error) {
 			console.error('Failed to get user info', error);
 		} 
-	}, [currentUser]);
+	}, []);
 
 	useEffect(() => {
 		const init = async () => {
