@@ -77,7 +77,7 @@ const UserCard = ({ user, setUsers }) => {
 UserCard.propTypes = {
 	setUsers: PropTypes.func.isRequired,
 	user: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.number.isRequired,
 		imgUrl: PropTypes.string,
 		name: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,

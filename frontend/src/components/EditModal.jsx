@@ -141,7 +141,7 @@ function EditModal({ setUsers, user }) {
 EditModal.propTypes = {
 	setUsers: PropTypes.func.isRequired,
 	user: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.number.isRequired,
 		name: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,
 		description: PropTypes.string,
