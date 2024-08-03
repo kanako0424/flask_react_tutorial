@@ -4,17 +4,18 @@ import UserCard from "./UserCard.jsx";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../App.jsx";
 
-const UserGrid = ({ users, setUsers }) => {
+const UserGrid = ({ users, setUsers, currentUser }) => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const getUsers = async () => {
+			if (!currentUser) return;
+
 			try {
-				const res = await fetch(BASE_URL+'/friends', {
+				const res = await fetch(`${BASE_URL}/friends?userId=${currentUser.userId}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
-						'Access-Control-Allow-Origin': '*',
 					},
 				});
 				const resData = await res.json();
@@ -30,7 +31,7 @@ const UserGrid = ({ users, setUsers }) => {
 			}
 		};
 		getUsers();
-	}, [setUsers]);
+	}, [setUsers, currentUser]);
 
 	return (
 		<>
@@ -77,7 +78,7 @@ UserGrid.propTypes = {
 	})),
 	setUsers: PropTypes.func,
 	isLoading: PropTypes.bool,
-  };
-
+	currentUser: PropTypes.object,
+};
 
 export default UserGrid;

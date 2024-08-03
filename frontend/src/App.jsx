@@ -3,11 +3,7 @@ import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext, useCallback } from "react";
 import liff from '@line/liff';
-// import { LiffMockPlugin } from '@line/liff-mock';
 import LIFFInspectorPlugin from '@line/liff-inspector';
-
-
-
 
 export const CurrentUserContext = createContext();
 
@@ -46,20 +42,6 @@ function App() {
 				body: JSON.stringify({ idToken }),
 			});
 			const profile = await response.json();
-			/* profileの返り値の中身の例
-			{
-				"iss": "https://access.line.me",
-				"sub": "U1234567890abcdef1234567890abcdef",
-				"aud": "1234567890",
-				"exp": 1504169092,
-				"iat": 1504263657,
-				"nonce": "0987654asdf",
-				"amr": ["pwd"],
-				"name": "Taro Line",
-				"picture": "https://sample_line.me/aBcdefg123456",
-				"email": "taro.line@example.com"
-			}
-			*/
 			setCurrentUser({
 				userId: profile.sub,
 				displayName: profile.name,
@@ -83,8 +65,6 @@ function App() {
 
 	}, []); // Dependency array is empty, which is appropriate for this use case.
 
-
-
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
@@ -105,11 +85,10 @@ function App() {
 						🚀
 					</Text>
 
-					<UserGrid users={users} setUsers={setUsers} />
+					<UserGrid users={users} setUsers={setUsers} currentUser={currentUser} />
 				</Container>
 			</Stack>
 		</CurrentUserContext.Provider>
-
 	);
 }
 
