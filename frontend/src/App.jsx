@@ -22,7 +22,7 @@ function App() {
 				withLoginOnExternalBrowser: true,
 			});
 			if (!liff.isLoggedIn()) {
-				liff.login();
+				liff.login({ redirectUri: location.href });
 			} else {
 				console.log('User is logged in');
 			}
@@ -32,7 +32,13 @@ function App() {
 	}, []);
 
 	const getUserInfo = useCallback(async () => {
+
 		const idToken = liff.getIDToken();
+		if (!idToken) {
+			console.error('ID Token is null or undefined');
+			return;
+		} 
+
 		try {
 			const response = await fetch(`${BASE_URL}/verify`, {
 				method: 'POST',
@@ -58,10 +64,14 @@ function App() {
 			await initializeLiff();
 			if (liff.isLoggedIn()) {
 				await getUserInfo();
+			} else {
+				console.error("liff is not logged in");
 			}
 		};
 
 		init();
+
+		// console.log(currentUser);
 
 	}, []); // Dependency array is empty, which is appropriate for this use case.
 
