@@ -4,7 +4,7 @@ from models import Friend
 import requests
 
 # Replace with your actual LINE channel ID
-LINE_CHANNEL_ID = '2005976312'
+LINE_CHANNEL_ID = '2006014570'
 
 def verify_id_token(id_token):
     url = 'https://api.line.me/oauth2/v2.1/verify'

@@ -11,31 +11,35 @@ const UserCard = ({ user, setUsers }) => {
 
 	const toast = useToast();
 	const handleDeleteUser = async () => {
-		try {
-			const res = await fetch(BASE_URL + "/friends/" + user.id, {
-				method: "DELETE",
-			});
-			const reData = await res.json();
-			if (!res.ok) {
-				throw new Error(reData.error);
+		window.alert("カードを削除しますよ？！")
+		if(window.alert) {
+
+			try {
+				const res = await fetch(BASE_URL + "/friends/" + user.id, {
+					method: "DELETE",
+				});
+				const reData = await res.json();
+				if (!res.ok) {
+					throw new Error(reData.error);
+				}
+				setUsers((prevUsers) => prevUsers.filter((u) => u.id !== user.id));
+				toast({
+					status: "success",
+					title: "Success",
+					description: "友達情報が削除されました！",
+					duration: 2000,
+					position: "top-center",
+				});
+			} catch (error) {
+				toast({
+					title: "友達情報の削除中にエラーが起きました",
+					description: error.message,
+					status: "error",
+					duration: 4000,
+					isClosable: true,
+					position: "top-center",
+				});
 			}
-			setUsers((prevUsers) => prevUsers.filter((u) => u.id !== user.id));
-			toast({
-				status: "success",
-				title: "Success",
-				description: "友達情報が削除されました！",
-				duration: 2000,
-				position: "top-center",
-			});
-		} catch (error) {
-			toast({
-				title: "友達情報の削除中にエラーが起きました",
-				description: error.message,
-				status: "error",
-				duration: 4000,
-				isClosable: true,
-				position: "top-center",
-			});
 		}
 	};
 	return (
