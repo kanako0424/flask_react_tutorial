@@ -1,11 +1,38 @@
 from app import app, db
 from flask import request, jsonify
-from models import Friend
+from models import Friend, User
 import requests
 import os
+from datetime import datetime
+
 
 # Replace with your actual LINE channel ID
 LINE_CHANNEL_ID = os.getenv("LINE_CHANNEL_ID")
+
+
+@app.route('/api/login', methods=['GET', 'POST'])
+def login():
+    user_id = request.json.get('userId')
+    liff_access_token = request.json.get('liffAccessToken')
+
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+
+    # Check if the user is already registered
+    existing_user = User.query.filter_by(userId=user_id).first()
+    is_registered = existing_user is not None
+    
+    if is_registered:
+        return jsonify({"message": "User already logined"}), 200
+    else:
+      # Register the new user
+      new_user = User(userId=user_id)
+      db.session.add(new_user)
+      db.session.commit()
+      # send_service_message
+      send_service_message_response = send_service_message(liff_access_token, user_id)
+      
+      return jsonify({"message": "User logined successfully", "user_id": user_id, "send_service_message_response": send_service_message_response}), 201
 
 
 def verify_id_token(id_token):
@@ -57,12 +84,7 @@ def issue_channel_access_token():
     return jsonify(response.json())
 
 
-@app.route('/api/send-service-message', methods=['POST'])
-def send_service_message():
-    liff_access_token = request.json.get('liffAccessToken')
-    if not liff_access_token:
-        return jsonify({"error": "LIFF Access Token is required"}), 400
-
+def send_service_message(liff_access_token, user_id):
     # Step 1: Get Channel Access Token
     channel_access_token_response = requests.post(
         "https://api.line.me/oauth2/v3/token",
@@ -75,7 +97,7 @@ def send_service_message():
     )
 
     if channel_access_token_response.status_code != 200:
-        return jsonify({"error": f"Failed to issue access token: {channel_access_token_response.text}"}), channel_access_token_response.status_code
+        raise Exception(f"Failed to issue access token: {channel_access_token_response.text}")
 
     channel_access_token = channel_access_token_response.json().get('access_token')
     print(channel_access_token)
@@ -93,7 +115,7 @@ def send_service_message():
     )
 
     if notification_token_response.status_code != 200:
-        return jsonify({"error": "Failed to get notification token", "details": notification_token_response.json()}), notification_token_response.status_code
+        raise Exception(f"Failed to get notification token: {notification_token_response.json()}")
 
     notification_token_data = notification_token_response.json()
 
@@ -107,19 +129,18 @@ def send_service_message():
         json={
             "templateName": "join_d_m_ja",
             "params": {
-                "btn1_url": "https://my-friend-j1c9.onrender.com",
-                "entry_date": "2033/3/31 0:00",
-                "expiration": "2044/10/10 0:00",
-                "user_number": "11023",
+                "btn1_url": "https://miniapp.line.me/2005976312-NqAkEXnX",
+                "entry_date": datetime.now().strftime("%Y/%m/%d %H:%M"),
+                "user_number": user_id,
             },
             "notificationToken": notification_token_data.get('notificationToken')
         }
     )
 
     if service_message_response.status_code != 200:
-        return jsonify({"error": "Failed to send service message", "details": service_message_response.json()}), service_message_response.status_code
+        raise Exception(f"Failed to send service message: {service_message_response.json()}")
 
-    return jsonify(service_message_response.json())
+    return service_message_response.json()
 
 
 # Get all friends

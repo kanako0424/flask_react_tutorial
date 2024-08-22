@@ -31,6 +31,23 @@ function App() {
     }
   }, []);
 
+  const login_to_myfre = useCallback(async (userId) => {
+    // Send userId to the backend to register the user
+    const liffAccessToken = liff.getAccessToken();
+    if (!liffAccessToken) {
+      throw new Error("LIFF Access Token is null or undefined");
+    }
+    const response = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: userId, liffAccessToken }),
+    });
+    const login_message = await response.json();
+    console.log(login_message);
+  }, []);
+
   const getUserInfo = useCallback(async () => {
     const idToken = liff.getIDToken();
     if (!idToken) {
@@ -52,6 +69,7 @@ function App() {
         displayName: profile.name,
         pictureUrl: profile.picture,
       });
+      login_to_myfre(profile.sub);
     } catch (error) {
       console.error("Failed to get user info", error);
     }
@@ -153,40 +171,11 @@ function App() {
     });
   };
 
-
-  const sendServiceMessage = useCallback(async () => {
-    try {
-      const liffAccessToken = liff.getAccessToken();
-      if (!liffAccessToken) {
-        throw new Error("LIFF Access Token is null or undefined");
-      }
-
-      const response = await fetch(`${BASE_URL}/send-service-message`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ liffAccessToken }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to send service message: ${response.statusText}`);
-      }
-
-      const serviceMessageData = await response.json();
-      console.log("Service Message Response:", serviceMessageData);
-
-    } catch (error) {
-      console.error("Error in sending service message:", error);
-    }
-  },[]);
-
   useEffect(() => {
     const init = async () => {
       await initializeLiff();
       if (liff.isLoggedIn()) {
         await getUserInfo();
-        await sendServiceMessage(); // 修正: ログインしている場合のみ呼び出す
       } else {
         console.error("liff is not logged in");
       }

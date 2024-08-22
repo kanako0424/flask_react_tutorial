@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///friends.db"
@@ -13,6 +14,7 @@ CORS(app)
 
 db = SQLAlchemy(app)
 
+from models import Friend, User  # モデルをインポート
 
 frontend_folder = os.path.join(os.getcwd(),"..","frontend")
 dist_folder = os.path.join(frontend_folder,"dist")

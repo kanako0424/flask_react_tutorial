@@ -9,9 +9,8 @@ class Friend(db.Model):
     img_url = db.Column(db.String(200), nullable=True)
     creatorId = db.Column(db.String(50), nullable=True, default="1")
     
-        
     def to_json(self):
-        return{
+        return {
             "id": self.id,
             "name": self.name,
             "role": self.role,
@@ -19,4 +18,14 @@ class Friend(db.Model):
             "gender": self.gender,
             "imgUrl": self.img_url,
             "creatorId": self.creatorId
+        }
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String(100), unique=True, nullable=False)
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "userId": self.userId
         }
