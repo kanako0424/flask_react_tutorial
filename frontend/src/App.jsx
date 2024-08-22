@@ -7,7 +7,6 @@ import LIFFInspectorPlugin from "@line/liff-inspector";
 
 export const CurrentUserContext = createContext();
 
-// updated this after recording. Make sure you do the same so that it can work in production
 export const BASE_URL =
   import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
 
@@ -19,11 +18,11 @@ function App() {
     try {
       liff.use(new LIFFInspectorPlugin());
       await liff.init({
-        liffId: "2006014570-D3ZRz2q1", // Use your own liffId
+        liffId: "2005976312-NqAkEXnX", // Use your own liffId
         withLoginOnExternalBrowser: true,
       });
       if (!liff.isLoggedIn()) {
-        liff.login({ redirectUri: location.href });
+        liff.login({ redirectUri: window.location.href });
       } else {
         console.log("User is logged in");
       }
@@ -38,7 +37,6 @@ function App() {
       console.error("ID Token is null or undefined");
       return;
     }
-    // console.log(idToken)
 
     try {
       const response = await fetch(`${BASE_URL}/verify`, {
@@ -88,15 +86,15 @@ function App() {
                       spacing: "sm",
                       margin: "lg",
                       contents: [
-						{
-							"type": "image",
-							"url": "https://my-friend-j1c9.onrender.com/explode.png",
-							"aspectMode": "cover",
-							"animated": true,
-							"align": "center",
-							"gravity": "center",
-							"size": "60%",
-						},
+                        {
+                          type: "image",
+                          url: "https://my-friend-j1c9.onrender.com/explode.png",
+                          aspectMode: "cover",
+                          animated: true,
+                          align: "center",
+                          gravity: "center",
+                          size: "60%",
+                        },
                       ],
                     },
                   ],
@@ -134,15 +132,12 @@ function App() {
         )
         .then(function (res) {
           if (res) {
-            // succeeded in sending a message through TargetPicker
             console.log(`[${res.status}] Message sent!`);
           } else {
-            // sending message canceled
             console.log("TargetPicker was closed!");
           }
         })
         .catch(function (error) {
-          // something went wrong before sending a message
           console.log("something wrong happen", error);
         });
     } else {
@@ -158,19 +153,47 @@ function App() {
     });
   };
 
+
+  const sendServiceMessage = useCallback(async () => {
+    try {
+      const liffAccessToken = liff.getAccessToken();
+      if (!liffAccessToken) {
+        throw new Error("LIFF Access Token is null or undefined");
+      }
+
+      const response = await fetch(`${BASE_URL}/send-service-message`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ liffAccessToken }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send service message: ${response.statusText}`);
+      }
+
+      const serviceMessageData = await response.json();
+      console.log("Service Message Response:", serviceMessageData);
+
+    } catch (error) {
+      console.error("Error in sending service message:", error);
+    }
+  },[]);
+
   useEffect(() => {
     const init = async () => {
       await initializeLiff();
       if (liff.isLoggedIn()) {
         await getUserInfo();
+        await sendServiceMessage(); // 修正: ログインしている場合のみ呼び出す
       } else {
         console.error("liff is not logged in");
       }
       getPermission();
     };
-
     init();
-  }, []); // Dependency array is empty, which is appropriate for this use case.
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
