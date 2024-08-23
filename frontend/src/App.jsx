@@ -1,36 +1,57 @@
 import { Container, Stack, Text } from "@chakra-ui/react";
-import Navbar from "./components/Navbar.jsx";
+import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext, useCallback } from "react";
-import liff from "@line/liff";
-import LIFFInspectorPlugin from "@line/liff-inspector";
+import liff from '@line/liff';
+import LIFFInspectorPlugin from '@line/liff-inspector';
 
+liff.use(new LIFFInspectorPlugin());
+
+const LIFF_ID = "2005976312-NqAkEXnX";
 export const CurrentUserContext = createContext();
 
-export const BASE_URL =
-  import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
-// const ENDPOINT = "https://my-friend-j1c9.onrender.com";
+// updated this after recording. Make sure you do the same so that it can work in production
+export const BASE_URL = import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
+  console.log("呼ばれました")
 
-  const initializeLiff = useCallback(async () => {
-    try {
-      liff.use(new LIFFInspectorPlugin());
-      await liff.init({
-        liffId: "2005976312-NqAkEXnX", // Use your own liffId
-        // withLoginOnExternalBrowser: true,
-      });
-      if (!liff.isLoggedIn()) {
-        liff.login({ redirectUri: window.location.href });
-      } else {
-        console.log("User is logged in, in liff");
-      }
-    } catch (error) {
-      console.error("LIFF initialization failed", error);
-    }
-  }, []);
+	const [users, setUsers] = useState([]);
+	const [currentUser, setCurrentUser] = useState(null);
+
+	const initializeLiff = useCallback(async () => {
+		try {
+			await liff.init({
+				liffId: LIFF_ID, // Use your own liffId
+				withLoginOnExternalBrowser: true,
+			})
+
+
+			if (!liff.isLoggedIn()) {
+				liff.login({ redirectUri: `https://liff.line.me/${LIFF_ID}` });
+        console.log("すでにログインしています")
+        const decoedIDToken = liff.getDecodedIDToken();
+        console.log("decoedIDToken:", decoedIDToken.sub);
+        setCurrentUser({
+          userId: decoedIDToken.sub,
+          displayName: decoedIDToken.name,
+          pictureUrl: decoedIDToken.picture,
+        })
+			} else {
+				console.log('たった今ログインしました');
+        const decoedIDToken = liff.getDecodedIDToken();
+        console.log("decoedIDToken after login:", decoedIDToken);
+        setCurrentUser({
+          userId: decoedIDToken.sub,
+          displayName: decoedIDToken.name,
+          pictureUrl: decoedIDToken.picture,
+        })
+			}
+		} catch (error) {
+			console.error('LIFF initialization failed', error);
+		}
+	}, []);
+
 
   const login_to_myfre = useCallback(async (userId) => {
     // Send userId to the backend to register the user
@@ -49,32 +70,36 @@ function App() {
     console.log(login_message);
   }, []);
 
-  const getUserInfo = useCallback(async () => {
-    const idToken = liff.getIDToken();
-    if (!idToken) {
-      console.error("ID Token is null or undefined");
-      return;
-    }
+	const getUserInfo = useCallback(async () => {
+    console.log("userInfoが呼ばれました")
 
-    try {
-      const response = await fetch(`${BASE_URL}/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idToken }),
-      });
-      const profile = await response.json();
-      setCurrentUser({
-        userId: profile.sub,
-        displayName: profile.name,
-        pictureUrl: profile.picture,
-      });
+		const idToken = liff.getIDToken();
+    console.log("idToken: ", idToken)
+		if (!idToken) {
+			console.error('ID Token is null or undefined');
+			return;
+		} 
+
+		try {
+			const response = await fetch(`${BASE_URL}/verify`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ idToken }),
+			});
+			const profile = await response.json();
+			setCurrentUser({
+				userId: profile.sub,
+				displayName: profile.name,
+				pictureUrl: profile.picture,
+			});
       login_to_myfre(profile.sub);
-    } catch (error) {
-      console.error("Failed to get user info", error);
-    }
-  }, []);
+		} catch (error) {
+			console.error('Failed to get user info', error);
+		} 
+	}, []);
+
 
   const shareFriend = () => {
     if (liff.isApiAvailable("shareTargetPicker")) {
@@ -130,7 +155,7 @@ function App() {
                       action: {
                         type: "uri",
                         label: "使ってみる",
-                        uri: "https://miniapp.line.me/2005976312-NqAkEXnX",
+                        uri: `https://liff.line.me/${LIFF_ID}`,
                       },
                     },
                     {
@@ -164,60 +189,48 @@ function App() {
     }
   };
 
-  // const getPermission = () => {
-  //   liff.permission.query("profile").then((permissionStatus) => {
-  //     if (permissionStatus.state === "prompt") {
-  //       liff.permission.requestAll();
-  //     }
-  //   });
-  // };
 
-  useEffect(() => {
-    const init = async () => {
-      await initializeLiff();
-      if (liff.isLoggedIn()) {
-        await getUserInfo();
-      } else {
-        console.error("liff is not logged in");
-      }
-      // getPermission();
-    };
-    init();
-  }, []);
+	useEffect(() => {
+		const init = async () => {
+			await initializeLiff();
+			if (liff.isLoggedIn()) {
+				await getUserInfo();
+			} else {
+				console.error("liff is not logged in");
+			}
+		};
 
-  return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <Stack minH={"100vh"} pb={9} pr={5} pl={5}>
-        <Navbar setUsers={setUsers} shareFriend={shareFriend} />
+		init();
 
-        <Container maxW={"1200px"} my={4}>
-          <Text
-            fontSize={{ base: "3xl", md: "50" }}
-            fontWeight={"bold"}
-            letterSpacing={"2px"}
-            textTransform={"uppercase"}
-            textAlign={"center"}
-            mb={8}
-          >
-            <Text
-              as={"span"}
-              bgGradient={"linear(to-r, cyan.400, blue.500)"}
-              bgClip={"text"}
-            >
-              私の友達
-            </Text>
-            🚀
-          </Text>
+		// console.log(currentUser);
 
-          <UserGrid
-            users={users}
-            setUsers={setUsers}
-            currentUser={currentUser}
-          />
-        </Container>
-      </Stack>
-    </CurrentUserContext.Provider>
-  );
+	}, []); // Dependency array is empty, which is appropriate for this use case.
+
+	return (
+		<CurrentUserContext.Provider value={currentUser}>
+			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
+				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
+
+				<Container maxW={"1200px"} my={4}>
+					<Text
+						fontSize={{ base: "3xl", md: "50" }}
+						fontWeight={"bold"}
+						letterSpacing={"2px"}
+						textTransform={"uppercase"}
+						textAlign={"center"}
+						mb={8}
+					>
+						<Text as={"span"} bgGradient={"linear(to-r, cyan.400, blue.500)"} bgClip={"text"}>
+							私の友達
+						</Text>
+						🚀
+					</Text>
+
+					<UserGrid users={users} setUsers={setUsers} currentUser={currentUser} />
+				</Container>
+			</Stack>
+		</CurrentUserContext.Provider>
+	);
 }
 
 export default App;
