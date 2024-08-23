@@ -83,6 +83,8 @@ function App() {
 				body: JSON.stringify({ idToken }),
 			});
 			const profile = await response.json();
+      console.log("profile情報の取得に成功しました", profile)
+
 			setCurrentUser({
 				userId: profile.sub,
 				displayName: profile.name,
