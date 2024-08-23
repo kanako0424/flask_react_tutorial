@@ -9,7 +9,7 @@ export const CurrentUserContext = createContext();
 
 // updated this after recording. Make sure you do the same so that it can work in production
 export const BASE_URL = import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
-
+const ENDPOINT = "https://liff.line.me/2006014570-D3ZRz2q1";
 function App() {
 	const [users, setUsers] = useState([]);
 	const [currentUser, setCurrentUser] = useState(null);
@@ -168,7 +168,7 @@ function App() {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
-				<Navbar setUsers={setUsers} />
+				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
 
 				<Container maxW={"1200px"} my={4}>
 					<Text
