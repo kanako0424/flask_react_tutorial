@@ -4,6 +4,7 @@ from models import Friend, User
 import requests
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
@@ -125,7 +126,7 @@ def send_service_message(liff_access_token, user_id):
             "templateName": "join_d_m_ja",
             "params": {
                 "btn1_url": "https://miniapp.line.me/2005976312-NqAkEXnX",
-                "entry_date": datetime.now("Asia/Tokyo").strftime("%Y/%m/%d %H:%M"),
+                "entry_date": datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d %H:%M"),
                 "user_number": user_id,
             },
             "notificationToken": notification_token_data.get('notificationToken')
