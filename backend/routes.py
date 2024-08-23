@@ -6,6 +6,8 @@ import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+LINE_MINIAPP_CHANNEL_ID="2005976312"
+LINE_MINIAPP_CHANNEL_SECRET="d2ccbcc3af23a2bff207880cef1fd5d3"
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
@@ -34,7 +36,7 @@ def login():
 
 def verify_id_token(id_token):
     url = "https://api.line.me/oauth2/v2.1/verify"
-    payload = {"id_token": id_token, "client_id": os.getenv("LINE_MINIAPP_CHANNEL_ID")}
+    payload = {"id_token": id_token, "client_id": LINE_MINIAPP_CHANNEL_ID}
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
     response = requests.post(url, data=payload, headers=headers)
@@ -66,8 +68,8 @@ def issue_channel_access_token():
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     data = {
         "grant_type": "client_credentials",
-        "client_id": os.getenv("LINE_MINIAPP_CHANNEL_ID"),
-        "client_secret": os.getenv("LINE_MINIAPP_CHANNEL_SECRET"),
+        "client_id": LINE_MINIAPP_CHANNEL_ID,
+        "client_secret": LINE_MINIAPP_CHANNEL_SECRET,
     }
 
     response = requests.post(url, headers=headers, data=data)
@@ -88,8 +90,8 @@ def send_service_message(liff_access_token, user_id):
         headers={"Content-Type": "application/x-www-form-urlencoded"},
         data={
             "grant_type": "client_credentials",
-            "client_id": os.getenv("LINE_MINIAPP_CHANNEL_ID"),
-            "client_secret": os.getenv("LINE_MINIAPP_CHANNEL_SECRET")
+            "client_id": LINE_MINIAPP_CHANNEL_ID,
+            "client_secret": LINE_MINIAPP_CHANNEL_SECRET
         }
     )
 
