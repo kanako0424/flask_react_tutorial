@@ -203,7 +203,7 @@ function App() {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
-        <div>{window.location.href}</div>
+        {/* <div>{window.location.href}</div> */}
 				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
 
 				<Container maxW={"1200px"} my={4}>
