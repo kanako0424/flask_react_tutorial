@@ -9,7 +9,7 @@ export const CurrentUserContext = createContext();
 
 export const BASE_URL =
   import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
-const ENDPOINT = "https://my-friend-j1c9.onrender.com";
+// const ENDPOINT = "https://my-friend-j1c9.onrender.com";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -17,7 +17,7 @@ function App() {
 
   const initializeLiff = useCallback(async () => {
     try {
-      liff.use(new LIFFInspectorPlugin({origin: 'wss://8f28d4b471e0.ngrok.app'}));
+      liff.use(new LIFFInspectorPlugin());
       await liff.init({
         liffId: "2005976312-NqAkEXnX", // Use your own liffId
         // withLoginOnExternalBrowser: true,
@@ -130,7 +130,7 @@ function App() {
                       action: {
                         type: "uri",
                         label: "使ってみる",
-                        uri: ENDPOINT,
+                        uri: "https://miniapp.line.me/2005976312-NqAkEXnX",
                       },
                     },
                     {
