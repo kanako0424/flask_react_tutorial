@@ -9,7 +9,7 @@ export const CurrentUserContext = createContext();
 
 export const BASE_URL =
   import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
-const ENDPOINT = "https://8f28d4b471e0.ngrok.app?li.origin=wss://fc5439efb6fb.ngrok.app";
+const ENDPOINT = "https://my-friend-j1c9.onrender.com";
 
 function App() {
   const [users, setUsers] = useState([]);
