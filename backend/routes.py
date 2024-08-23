@@ -37,7 +37,7 @@ def login():
 
 def verify_id_token(id_token):
     url = "https://api.line.me/oauth2/v2.1/verify"
-    payload = {"id_token": id_token, "client_id": LINE_CHANNEL_ID}
+    payload = {"id_token": id_token, "client_id": os.getenv("LINE_MINIAPP_CHANNEL_ID")}
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
     response = requests.post(url, data=payload, headers=headers)
