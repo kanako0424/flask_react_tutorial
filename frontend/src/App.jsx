@@ -24,16 +24,28 @@ function App() {
 			await liff.init({
 				liffId: LIFF_ID, // Use your own liffId
 				withLoginOnExternalBrowser: true,
-			});
+			})
+
+
 			if (!liff.isLoggedIn()) {
 				liff.login({ redirectUri: `https://liff.line.me/${LIFF_ID}` });
         console.log("すでにログインしています")
         const decoedIDToken = liff.getDecodedIDToken();
-        console.log("decoedIDToken:", decoedIDToken);
+        console.log("decoedIDToken:", decoedIDToken.sub);
+        setCurrentUser({
+          userId: decoedIDToken.sub,
+          displayName: decoedIDToken.name,
+          pictureUrl: decoedIDToken.picture,
+        })
 			} else {
 				console.log('たった今ログインしました');
         const decoedIDToken = liff.getDecodedIDToken();
         console.log("decoedIDToken after login:", decoedIDToken);
+        setCurrentUser({
+          userId: decoedIDToken.sub,
+          displayName: decoedIDToken.name,
+          pictureUrl: decoedIDToken.picture,
+        })
 			}
 		} catch (error) {
 			console.error('LIFF initialization failed', error);
@@ -41,6 +53,7 @@ function App() {
 	}, []);
 
 	const getUserInfo = useCallback(async () => {
+    console.log("userInfoが呼ばれました")
 
 		const idToken = liff.getIDToken();
     console.log("idToken: ", idToken)
