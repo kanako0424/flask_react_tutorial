@@ -18,7 +18,7 @@ function App() {
 		try {
 			// liff.use(new LIFFInspectorPlugin());
 			await liff.init({
-				liffId: '2005976312-NqAkEXnX', // Use your own liffId
+				liffId: '2006014570-D3ZRz2q1', // Use your own liffId
 				withLoginOnExternalBrowser: true,
 			});
 			if (!liff.isLoggedIn()) {
