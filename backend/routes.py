@@ -96,7 +96,6 @@ def send_service_message(liff_access_token, user_id):
         raise Exception(f"Failed to issue access token: {channel_access_token_response.text}")
 
     channel_access_token = channel_access_token_response.json().get('access_token')
-    print(channel_access_token)
 
     # Step 2: Get Notification Token
     notification_token_response = requests.post(
@@ -126,7 +125,7 @@ def send_service_message(liff_access_token, user_id):
             "templateName": "join_d_m_ja",
             "params": {
                 "btn1_url": "https://miniapp.line.me/2005976312-NqAkEXnX",
-                "entry_date": datetime.now().strftime("%Y/%m/%d %H:%M"),
+                "entry_date": datetime.now("Asia/Tokyo").strftime("%Y/%m/%d %H:%M"),
                 "user_number": user_id,
             },
             "notificationToken": notification_token_data.get('notificationToken')
@@ -172,7 +171,6 @@ def create_friend():
         description = data.get("description")
         gender = data.get("gender")
         creatorId = data.get("creatorId")
-        print("routes.py l.29 creatorid: ", creatorId)
 
         # Fetch avatar image based on gender
         if gender == "male":

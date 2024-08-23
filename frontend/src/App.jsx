@@ -35,7 +35,7 @@ function App() {
 				console.log('ログインしています');
 			}
       const decoedIDToken = liff.getDecodedIDToken();
-      console.log("decoedIDToken after login:", decoedIDToken);
+      // console.log("decoedIDToken after login:", decoedIDToken);
       setCurrentUser({
         userId: decoedIDToken.sub,
         displayName: decoedIDToken.name,
