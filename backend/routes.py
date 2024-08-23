@@ -30,6 +30,7 @@ def verify_id_token(id_token):
 def verify():
     data = request.json
     id_token = data.get('idToken')
+    print("\nid_token:", id_token, "\n")
     
     try:
         user_info = verify_id_token(id_token)

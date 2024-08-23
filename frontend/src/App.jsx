@@ -14,6 +14,8 @@ export const CurrentUserContext = createContext();
 export const BASE_URL = import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
 
 function App() {
+  console.log("呼ばれました")
+
 	const [users, setUsers] = useState([]);
 	const [currentUser, setCurrentUser] = useState(null);
 
@@ -24,9 +26,14 @@ function App() {
 				withLoginOnExternalBrowser: true,
 			});
 			if (!liff.isLoggedIn()) {
-				liff.login({ redirectUri: location.href });
+				liff.login({ redirectUri: `https://liff.line.me/${LIFF_ID}` });
+        console.log("すでにログインしています")
+        const decoedIDToken = liff.getDecodedIDToken();
+        console.log("decoedIDToken:", decoedIDToken);
 			} else {
-				console.log('User is logged in');
+				console.log('たった今ログインしました');
+        const decoedIDToken = liff.getDecodedIDToken();
+        console.log("decoedIDToken after login:", decoedIDToken);
 			}
 		} catch (error) {
 			console.error('LIFF initialization failed', error);
@@ -36,6 +43,7 @@ function App() {
 	const getUserInfo = useCallback(async () => {
 
 		const idToken = liff.getIDToken();
+    console.log("idToken: ", idToken)
 		if (!idToken) {
 			console.error('ID Token is null or undefined');
 			return;
