@@ -9,6 +9,7 @@ export const CurrentUserContext = createContext();
 
 export const BASE_URL =
   import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
+const ENDPOINT = "https://8f28d4b471e0.ngrok.app?li.origin=wss://fc5439efb6fb.ngrok.app";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -16,15 +17,15 @@ function App() {
 
   const initializeLiff = useCallback(async () => {
     try {
-      liff.use(new LIFFInspectorPlugin());
+      liff.use(new LIFFInspectorPlugin({origin: 'wss://8f28d4b471e0.ngrok.app'}));
       await liff.init({
         liffId: "2005976312-NqAkEXnX", // Use your own liffId
-        withLoginOnExternalBrowser: true,
+        // withLoginOnExternalBrowser: true,
       });
       if (!liff.isLoggedIn()) {
         liff.login({ redirectUri: window.location.href });
       } else {
-        console.log("User is logged in");
+        console.log("User is logged in, in liff");
       }
     } catch (error) {
       console.error("LIFF initialization failed", error);
@@ -82,7 +83,7 @@ function App() {
           [
             {
               type: "flex",
-              altText: "Flex Message",
+              altText: `${currentUser.displayName}がマイフレに招待しています`,
               contents: {
                 type: "bubble",
                 body: {
@@ -129,7 +130,7 @@ function App() {
                       action: {
                         type: "uri",
                         label: "使ってみる",
-                        uri: "https://liff.line.me/2006014570-D3ZRz2q1",
+                        uri: ENDPOINT,
                       },
                     },
                     {
@@ -163,13 +164,13 @@ function App() {
     }
   };
 
-  const getPermission = () => {
-    liff.permission.query("profile").then((permissionStatus) => {
-      if (permissionStatus.state === "prompt") {
-        liff.permission.requestAll();
-      }
-    });
-  };
+  // const getPermission = () => {
+  //   liff.permission.query("profile").then((permissionStatus) => {
+  //     if (permissionStatus.state === "prompt") {
+  //       liff.permission.requestAll();
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     const init = async () => {
@@ -179,7 +180,7 @@ function App() {
       } else {
         console.error("liff is not logged in");
       }
-      getPermission();
+      // getPermission();
     };
     init();
   }, []);

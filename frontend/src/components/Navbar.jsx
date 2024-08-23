@@ -38,9 +38,7 @@ const Navbar = ({ setUsers, shareFriend }) => {
             display={{ base: "none", sm: "flex" }}
           >
             <img src="/explode.png" alt="Explode head" width={45} height={45} />
-            <Button onClick={() => shareFriend()} bgColor="#06c755" color={"white"}>
-              友だちに教える
-            </Button>
+
           </Flex>
           {/* Right side */}
           <Flex gap={3} alignItems={"center"}>
@@ -62,6 +60,9 @@ const Navbar = ({ setUsers, shareFriend }) => {
               {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
             </Button>
             <CreateUserModal setUsers={setUsers} />
+            <Button onClick={() => shareFriend()} bgColor="#06c755" color={"white"}>
+              友だちに送る
+            </Button>
           </Flex>
         </Flex>
       </Box>
