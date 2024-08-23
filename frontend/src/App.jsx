@@ -71,11 +71,13 @@ function App() {
 				body: JSON.stringify({ idToken }),
 			});
 			const profile = await response.json();
-			setCurrentUser({
-				userId: profile.sub,
-				displayName: profile.name,
-				pictureUrl: profile.picture,
-			});
+      if (profile.sub) {
+        setCurrentUser({
+          userId: profile.sub,
+          displayName: profile.name,
+          pictureUrl: profile.picture,
+        });
+      }
 
 		} catch (error) {
 			console.error('Failed to get user info', error);
