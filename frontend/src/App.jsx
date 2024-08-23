@@ -29,7 +29,7 @@ function App() {
 
 			if (!liff.isLoggedIn()) {
         console.log("ログインしていません")
-				liff.login({ redirectUri: `https://liff.line.me/${LIFF_ID}` });
+				liff.login({ redirectUri: `https://miniapp.line.me/${LIFF_ID}` });
         console.log("ログインしていなかったのでたった今ログインしました")
 			} else {
 				console.log('ログインしています');
@@ -156,7 +156,7 @@ function App() {
                       action: {
                         type: "uri",
                         label: "使ってみる",
-                        uri: `https://liff.line.me/${LIFF_ID}`,
+                        uri: `https://miniapp.line.me/${LIFF_ID}`,
                       },
                     },
                     {

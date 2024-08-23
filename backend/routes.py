@@ -60,27 +60,6 @@ def verify():
         return jsonify({"isValid": False, "error": str(e)}), 400
 
 
-@app.route("/api/issue-channel-access-token", methods=["GET", "POST"])
-def issue_channel_access_token():
-    url = "https://api.line.me/oauth2/v3/token"
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": LINE_MINIAPP_CHANNEL_ID,
-        "client_secret": LINE_MINIAPP_CHANNEL_SECRET,
-    }
-
-    response = requests.post(url, headers=headers, data=data)
-
-    if response.status_code != 200:
-        return (
-            jsonify({"error": f"Failed to issue access token: {response.text}"}),
-            response.status_code,
-        )
-
-    return jsonify(response.json())
-
-
 def send_service_message(liff_access_token, user_id):
     # Step 1: Get Channel Access Token
     channel_access_token_response = requests.post(
