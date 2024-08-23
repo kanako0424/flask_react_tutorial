@@ -6,10 +6,6 @@ import os
 from datetime import datetime
 
 
-# Replace with your actual LINE channel ID
-LINE_CHANNEL_ID = os.getenv("LINE_CHANNEL_ID")
-
-
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
     user_id = request.json.get('userId')
