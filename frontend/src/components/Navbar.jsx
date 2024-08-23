@@ -12,13 +12,12 @@ import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 import CreateUserModal from "./CreateUserModal.jsx";
 import PropTypes from "prop-types";
-// import { CurrentUserContext } from "../App.jsx";
-// import { useContext } from "react";
+import { CurrentUserContext } from "../App.jsx";
+import { useContext } from "react";
 
-const Navbar = ({ setUsers, shareFriend, currentUser }) => {
+const Navbar = ({ setUsers, shareFriend }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  // const currentUser = useContext(CurrentUserContext);
-  console.log("NavbarのCurrentUser: \n", currentUser);
+  const currentUser = useContext(CurrentUserContext);
 
 
 
@@ -73,7 +72,7 @@ const Navbar = ({ setUsers, shareFriend, currentUser }) => {
 Navbar.propTypes = {
   setUsers: PropTypes.func,
   shareFriend: PropTypes.func,
-  currentUser: PropTypes.object,
 };
 
 export default Navbar;
+

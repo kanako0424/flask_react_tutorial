@@ -35,12 +35,14 @@ function App() {
 				console.log('ログインしています');
 			}
       const decoedIDToken = liff.getDecodedIDToken();
-      // console.log("decoedIDToken after login:", decoedIDToken);
-      setCurrentUser({
-        userId: decoedIDToken.sub,
-        displayName: decoedIDToken.name,
-        pictureUrl: decoedIDToken.picture,
-      })
+      console.log("decoedIDToken after login:", decoedIDToken);
+      if (decoedIDToken.sub) {
+        setCurrentUser({
+          userId: decoedIDToken.sub,
+          displayName: decoedIDToken.name,
+          pictureUrl: decoedIDToken.picture,
+        })
+      }
 		} catch (error) {
 			console.error('LIFF initialization failed', error);
 		}
@@ -83,14 +85,17 @@ function App() {
 				body: JSON.stringify({ idToken }),
 			});
 			const profile = await response.json();
-      console.log("profile情報の取得に成功しました", profile)
+      if (profile.sub) {
+        setCurrentUser({
+          userId: profile.sub,
+          displayName: profile.name,
+          pictureUrl: profile.picture,
+        });
+        login_to_myfre(profile.sub);
+      }
 
-			setCurrentUser({
-				userId: profile.sub,
-				displayName: profile.name,
-				pictureUrl: profile.picture,
-			});
-      login_to_myfre(profile.sub);
+      console.log("profile情報の取得に失敗しました", profile)
+
 		} catch (error) {
 			console.error('Failed to get user info', error);
 		} 
@@ -205,7 +210,6 @@ function App() {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
-        <div>{currentUser.displayName}</div>
 				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
 
 				<Container maxW={"1200px"} my={4}>

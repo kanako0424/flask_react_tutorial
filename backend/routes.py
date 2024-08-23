@@ -34,32 +34,30 @@ def login():
       return jsonify({"message": "User logined successfully", "user_id": user_id, "send_service_message_response": send_service_message_response}), 201
 
 
-def verify_id_token(id_token):
+@app.route("/api/verify", methods=["POST"])
+def verify():
+    data = request.json
+    if data is None:
+        print("Error: Request body is not valid JSON")
+        return jsonify({"isValid": False, "error": "Invalid JSON"}), 400
+
+    id_token = data.get("idToken")
+    if id_token is None:
+        print("Error: 'idToken' not found in request body")
+        return jsonify({"isValid": False, "error": "Missing idToken"}), 400
+
     url = "https://api.line.me/oauth2/v2.1/verify"
     payload = {"id_token": id_token, "client_id": LINE_MINIAPP_CHANNEL_ID}
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-    response = requests.post(url, data=payload, headers=headers)
-
-    if response.status_code == 200:
-        response_json = response.json()
-        return response_json
-    else:
-        response.raise_for_status()
-
-
-# verify LINE UserID
-@app.route("/api/verify", methods=["POST"])
-def verify():
-    data = request.json
-    id_token = data.get("idToken")
-
     try:
-        user_info = verify_id_token(id_token)
-        return user_info
-    except Exception as e:
+        response = requests.post(url, data=payload, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        response_json = response.json()
+        return jsonify(response_json)
+    except requests.exceptions.RequestException as e:
         print(f"Error verifying ID token: {e}")
-        return jsonify({"isValid": False}), 400
+        return jsonify({"isValid": False, "error": str(e)}), 400
 
 
 @app.route("/api/issue-channel-access-token", methods=["GET", "POST"])
