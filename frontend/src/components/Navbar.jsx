@@ -38,7 +38,6 @@ const Navbar = ({ setUsers, shareFriend }) => {
             display={{ base: "none", sm: "flex" }}
           >
             <img src="/explode.png" alt="Explode head" width={45} height={45} />
-
           </Flex>
           {/* Right side */}
           <Flex gap={3} alignItems={"center"}>
