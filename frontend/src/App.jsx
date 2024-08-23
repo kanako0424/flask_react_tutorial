@@ -3,22 +3,24 @@ import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext, useCallback } from "react";
 import liff from '@line/liff';
-// import LIFFInspectorPlugin from '@line/liff-inspector';
+import LIFFInspectorPlugin from '@line/liff-inspector';
 
+liff.use(new LIFFInspectorPlugin());
+
+const LIFF_ID = "2006014570-D3ZRz2q1";
 export const CurrentUserContext = createContext();
 
 // updated this after recording. Make sure you do the same so that it can work in production
 export const BASE_URL = import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
-const ENDPOINT = "https://liff.line.me/2006014570-D3ZRz2q1";
+
 function App() {
 	const [users, setUsers] = useState([]);
 	const [currentUser, setCurrentUser] = useState(null);
 
 	const initializeLiff = useCallback(async () => {
 		try {
-			// liff.use(new LIFFInspectorPlugin());
 			await liff.init({
-				liffId: '2006014570-D3ZRz2q1', // Use your own liffId
+				liffId: LIFF_ID, // Use your own liffId
 				withLoginOnExternalBrowser: true,
 			});
 			if (!liff.isLoggedIn()) {
@@ -114,7 +116,7 @@ function App() {
                       action: {
                         type: "uri",
                         label: "使ってみる",
-                        uri: ENDPOINT,
+                        uri: `https://liff.line.me/${LIFF_ID}`,
                       },
                     },
                     {
