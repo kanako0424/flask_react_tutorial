@@ -25,28 +25,22 @@ function App() {
 				liffId: LIFF_ID, // Use your own liffId
 				withLoginOnExternalBrowser: true,
 			})
-
+      //ここで1次リダイレクト（エンドポイントURLに遷移）され、パラメーターが付与される
 
 			if (!liff.isLoggedIn()) {
+        console.log("ログインしていません")
 				liff.login({ redirectUri: `https://liff.line.me/${LIFF_ID}` });
-        console.log("すでにログインしています")
-        const decoedIDToken = liff.getDecodedIDToken();
-        console.log("decoedIDToken:", decoedIDToken.sub);
-        setCurrentUser({
-          userId: decoedIDToken.sub,
-          displayName: decoedIDToken.name,
-          pictureUrl: decoedIDToken.picture,
-        })
+        console.log("ログインしていなかったのでたった今ログインしました")
 			} else {
-				console.log('たった今ログインしました');
-        const decoedIDToken = liff.getDecodedIDToken();
-        console.log("decoedIDToken after login:", decoedIDToken);
-        setCurrentUser({
-          userId: decoedIDToken.sub,
-          displayName: decoedIDToken.name,
-          pictureUrl: decoedIDToken.picture,
-        })
+				console.log('ログインしています');
 			}
+      const decoedIDToken = liff.getDecodedIDToken();
+      console.log("decoedIDToken after login:", decoedIDToken);
+      setCurrentUser({
+        userId: decoedIDToken.sub,
+        displayName: decoedIDToken.name,
+        pictureUrl: decoedIDToken.picture,
+      })
 		} catch (error) {
 			console.error('LIFF initialization failed', error);
 		}
@@ -209,6 +203,7 @@ function App() {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
+        <div>{window.location.href}</div>
 				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
 
 				<Container maxW={"1200px"} my={4}>
