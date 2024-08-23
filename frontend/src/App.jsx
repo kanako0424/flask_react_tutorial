@@ -59,6 +59,96 @@ function App() {
 		} 
 	}, []);
 
+
+  const shareFriend = () => {
+    if (liff.isApiAvailable("shareTargetPicker")) {
+      liff
+        .shareTargetPicker(
+          [
+            {
+              type: "flex",
+              altText: `${currentUser.displayName}がマイフレに招待しています`,
+              contents: {
+                type: "bubble",
+                body: {
+                  type: "box",
+                  layout: "vertical",
+                  spacing: "0px",
+                  contents: [
+                    {
+                      type: "text",
+                      text: `${currentUser.displayName}がマイフレに招待しています`,
+                      size: "xl",
+                      gravity: "center",
+                      weight: "bold",
+                      wrap: true,
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      spacing: "sm",
+                      margin: "lg",
+                      contents: [
+                        {
+                          type: "image",
+                          url: "https://my-friend-j1c9.onrender.com/explode.png",
+                          aspectMode: "cover",
+                          animated: true,
+                          align: "center",
+                          gravity: "center",
+                          size: "60%",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                footer: {
+                  type: "box",
+                  layout: "vertical",
+                  spacing: "sm",
+                  contents: [
+                    {
+                      type: "button",
+                      style: "link",
+                      height: "sm",
+                      action: {
+                        type: "uri",
+                        label: "使ってみる",
+                        uri: ENDPOINT,
+                      },
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [],
+                      margin: "sm",
+                    },
+                  ],
+                  flex: 0,
+                },
+              },
+            },
+          ],
+          {
+            isMultiple: true,
+          }
+        )
+        .then(function (res) {
+          if (res) {
+            console.log(`[${res.status}] Message sent!`);
+          } else {
+            console.log("TargetPicker was closed!");
+          }
+        })
+        .catch(function (error) {
+          console.log("something wrong happen", error);
+        });
+    } else {
+      console.log("not availabel");
+    }
+  };
+
+
 	useEffect(() => {
 		const init = async () => {
 			await initializeLiff();
