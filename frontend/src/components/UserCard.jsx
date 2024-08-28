@@ -21,8 +21,7 @@ const UserCard = ({ user, setUsers }) => {
 
   const toast = useToast();
   const handleDeleteUser = async () => {
-    window.alert("カードを削除しますよ？！");
-    if (window.alert) {
+    if (window.confirm("カードを削除しますよ？！")) {
       try {
         const res = await fetch(BASE_URL + "/friends/" + user.id, {
           method: "DELETE",
