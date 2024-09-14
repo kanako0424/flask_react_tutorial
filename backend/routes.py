@@ -4,15 +4,15 @@ from models import Friend, User
 import requests
 import os
 from datetime import datetime
-from zoneinfo import ZoneInfo
 
-LINE_MINIAPP_CHANNEL_ID="2005976312"
-LINE_MINIAPP_CHANNEL_SECRET="d2ccbcc3af23a2bff207880cef1fd5d3"
+LINE_MINIAPP_CHANNEL_ID = "2005976312"
+LINE_MINIAPP_CHANNEL_SECRET = "d2ccbcc3af23a2bff207880cef1fd5d3"
 
-@app.route('/api/login', methods=['GET', 'POST'])
+
+@app.route("/api/login", methods=["GET", "POST"])
 def login():
-    user_id = request.json.get('userId')
-    liff_access_token = request.json.get('liffAccessToken')
+    user_id = request.json.get("userId")
+    liff_access_token = request.json.get("liffAccessToken")
 
     if not user_id:
         return jsonify({"error": "User ID is required"}), 400
@@ -20,18 +20,27 @@ def login():
     # Check if the user is already registered
     existing_user = User.query.filter_by(userId=user_id).first()
     is_registered = existing_user is not None
-    
+
     if is_registered:
         return jsonify({"message": "User already logined"}), 200
     else:
-      # Register the new user
-      new_user = User(userId=user_id)
-      db.session.add(new_user)
-      db.session.commit()
-      # send_service_message
-      send_service_message_response = send_service_message(liff_access_token, user_id)
-      
-      return jsonify({"message": "User logined successfully", "user_id": user_id, "send_service_message_response": send_service_message_response}), 201
+        # Register the new user
+        new_user = User(userId=user_id)
+        db.session.add(new_user)
+        db.session.commit()
+        # send_service_message
+        send_service_message_response = send_service_message(liff_access_token, user_id)
+
+        return (
+            jsonify(
+                {
+                    "message": "User logined successfully",
+                    "user_id": user_id,
+                    "send_service_message_response": send_service_message_response,
+                }
+            ),
+            201,
+        )
 
 
 @app.route("/api/verify", methods=["POST"])
@@ -68,29 +77,31 @@ def send_service_message(liff_access_token, user_id):
         data={
             "grant_type": "client_credentials",
             "client_id": LINE_MINIAPP_CHANNEL_ID,
-            "client_secret": LINE_MINIAPP_CHANNEL_SECRET
-        }
+            "client_secret": LINE_MINIAPP_CHANNEL_SECRET,
+        },
     )
 
     if channel_access_token_response.status_code != 200:
-        raise Exception(f"Failed to issue access token: {channel_access_token_response.text}")
+        raise Exception(
+            f"Failed to issue access token: {channel_access_token_response.text}"
+        )
 
-    channel_access_token = channel_access_token_response.json().get('access_token')
+    channel_access_token = channel_access_token_response.json().get("access_token")
 
     # Step 2: Get Notification Token
     notification_token_response = requests.post(
         "https://api.line.me/message/v3/notifier/token",
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {channel_access_token}"
+            "Authorization": f"Bearer {channel_access_token}",
         },
-        json={
-            "liffAccessToken": liff_access_token
-        }
+        json={"liffAccessToken": liff_access_token},
     )
 
     if notification_token_response.status_code != 200:
-        raise Exception(f"Failed to get notification token: {notification_token_response.json()}")
+        raise Exception(
+            f"Failed to get notification token: {notification_token_response.json()}"
+        )
 
     notification_token_data = notification_token_response.json()
 
@@ -99,21 +110,25 @@ def send_service_message(liff_access_token, user_id):
         "https://api.line.me/message/v3/notifier/send?target=service",
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {channel_access_token}"
+            "Authorization": f"Bearer {channel_access_token}",
         },
         json={
             "templateName": "join_d_m_ja",
             "params": {
                 "btn1_url": "https://miniapp.line.me/2005976312-NqAkEXnX",
-                "entry_date": datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d %H:%M"),
+                "entry_date": datetime.now(ZoneInfo("Asia/Tokyo")).strftime(
+                    "%Y/%m/%d %H:%M"
+                ),
                 "user_number": user_id,
             },
-            "notificationToken": notification_token_data.get('notificationToken')
-        }
+            "notificationToken": notification_token_data.get("notificationToken"),
+        },
     )
 
     if service_message_response.status_code != 200:
-        raise Exception(f"Failed to send service message: {service_message_response.json()}")
+        raise Exception(
+            f"Failed to send service message: {service_message_response.json()}"
+        )
 
     return service_message_response.json()
 

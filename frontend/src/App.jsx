@@ -3,9 +3,6 @@ import Navbar from './components/Navbar.jsx';
 import UserGrid from "./components/UserGrid.jsx";
 import { useState, useEffect, createContext, useCallback } from "react";
 import liff from '@line/liff';
-import LIFFInspectorPlugin from '@line/liff-inspector';
-
-liff.use(new LIFFInspectorPlugin());
 
 const LIFF_ID = "2005976312-NqAkEXnX";
 export const CurrentUserContext = createContext();
@@ -66,9 +63,7 @@ function App() {
     console.log(login_message);
   }, []);
 
-	const getUserInfo = useCallback(async () => {
-    console.log("userInfoが呼ばれました")
-
+	const initializeCurrentUser = useCallback(async () => {
 		const idToken = liff.getIDToken();
     console.log("idToken: ", idToken)
 		if (!idToken) {
@@ -93,16 +88,13 @@ function App() {
         });
         login_to_myfre(profile.sub);
       }
-
-      console.log("profile情報の取得に失敗しました", profile)
-
 		} catch (error) {
 			console.error('Failed to get user info', error);
 		} 
 	}, []);
 
 
-  const shareFriend = () => {
+  const sharMyfreToFriend = () => {
     if (liff.isApiAvailable("shareTargetPicker")) {
       liff
         .shareTargetPicker(
@@ -195,22 +187,18 @@ function App() {
 		const init = async () => {
 			await initializeLiff();
 			if (liff.isLoggedIn()) {
-				await getUserInfo();
+				await initializeCurrentUser();
 			} else {
 				console.error("liff is not logged in");
 			}
 		};
-
 		init();
-
-		// console.log(currentUser);
-
-	}, []); // Dependency array is empty, which is appropriate for this use case.
+	}, []); 
 
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<Stack minH={"100vh"} pb={9} pr={5} pl={5}>
-				<Navbar setUsers={setUsers} shareFriend={shareFriend}/>
+				<Navbar setUsers={setUsers} sharMyfreToFriend={sharMyfreToFriend}/>
 
 				<Container maxW={"1200px"} my={4}>
 					<Text

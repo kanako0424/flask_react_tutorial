@@ -6,7 +6,7 @@ import os
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///friends.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///myfre.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # We can comment this CORS config for the production because we are running the frontend and backend on the same server

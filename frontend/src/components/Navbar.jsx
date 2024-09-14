@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import { CurrentUserContext } from "../App.jsx";
 import { useContext } from "react";
 
-const Navbar = ({ setUsers, shareFriend }) => {
+const Navbar = ({ setUsers, sharMyfreToFriend }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const currentUser = useContext(CurrentUserContext);
 
@@ -59,7 +59,7 @@ const Navbar = ({ setUsers, shareFriend }) => {
               {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
             </Button>
             <CreateUserModal setUsers={setUsers} />
-            <Button onClick={() => shareFriend()} bgColor="#06c755" color={"white"}>
+            <Button onClick={() => sharMyfreToFriend()} bgColor="#06c755" color={"white"}>
               友だちに送る
             </Button>
           </Flex>
@@ -71,7 +71,7 @@ const Navbar = ({ setUsers, shareFriend }) => {
 
 Navbar.propTypes = {
   setUsers: PropTypes.func,
-  shareFriend: PropTypes.func,
+  sharMyfreToFriend: PropTypes.func,
 };
 
 export default Navbar;
